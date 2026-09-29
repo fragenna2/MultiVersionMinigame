@@ -2,19 +2,22 @@ plugins {
     id("java")
 }
 
-group = "com.github.fragenna2"
-version = "1.0-SNAPSHOT"
+allprojects {
+    group = "com.github.fragenna2.multiversion"
+    version = "1.0.0"
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    }
 }
 
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
+subprojects {
+    apply(plugin = "java")
 
-tasks.test {
-    useJUnitPlatform()
+    tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
 }

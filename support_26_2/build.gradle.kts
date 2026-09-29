@@ -1,20 +1,20 @@
+// Module 26_2
 plugins {
     id("java")
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.23"
 }
 
 group = "com.github.fragenna2.multiversion"
 version = "1.0.0"
 
-repositories {
-    mavenCentral()
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
 }
+
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-tasks.test {
-    useJUnitPlatform()
+    implementation(project(":core"))
+    paperweight.paperDevBundle("26.2.build.129-stable")
 }

@@ -1,20 +1,26 @@
+// Core module
 plugins {
-    id("java")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.github.fragenna2.multiversion"
 version = "1.0.0"
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+
+//    compileOnly(project(":support_v1_8"))
+//    compileOnly(project(":support_26_2"))
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks.shadowJar {
+    archiveClassifier.set("")
+    from(project(":support_v1_8").the<SourceSetContainer>()["main"].output)
+    from(project(":support_26_2").the<SourceSetContainer>()["main"].output)
+
+    dependsOn(":support_v1_8:classes", ":support_26_2:classes")
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }

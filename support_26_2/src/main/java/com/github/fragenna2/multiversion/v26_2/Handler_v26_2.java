@@ -1,4 +1,4 @@
-package com.github.fragenna2.multiversion;
+package com.github.fragenna2.multiversion.v26_2;
 
 import com.github.fragenna2.multiversion.api.NMSHandler;
 import org.bukkit.Bukkit;
