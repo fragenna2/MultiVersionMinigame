@@ -101,10 +101,6 @@ public class Handler_v1_8 implements NMSHandler {
 
     @Override
     public void test(Player player) {
-        if (player == null) return;
-
-        spawnNpc();
-        showNpc(player.getUniqueId());
-        player.sendMessage("§a[1.8.8] NPC spawned successfully!");
+        player.sendMessage("§a[1.8.8] Welcome!");
     }
 }

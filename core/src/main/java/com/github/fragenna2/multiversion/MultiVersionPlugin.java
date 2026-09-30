@@ -1,6 +1,7 @@
 package com.github.fragenna2.multiversion;
 
 import com.github.fragenna2.multiversion.api.NMSHandler;
+import com.github.fragenna2.multiversion.listeners.JoinEvent;
 import com.github.fragenna2.multiversion.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +20,7 @@ public class MultiVersionPlugin extends JavaPlugin {
             return;
         }
 
+        getServer().getPluginManager().registerEvents(new JoinEvent(this.nmsHandler), this);
     }
 
     private boolean setupNms() {

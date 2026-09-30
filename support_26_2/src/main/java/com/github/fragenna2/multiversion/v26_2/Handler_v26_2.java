@@ -29,6 +29,6 @@ public class Handler_v26_2 implements NMSHandler {
 
     @Override
     public void test(org.bukkit.entity.Player player) {
-        Bukkit.getLogger().info("Version of the server is: " + Bukkit.getServer().getVersion());
+        player.sendRichMessage("<green>Version: 26.2");
     }
 }
