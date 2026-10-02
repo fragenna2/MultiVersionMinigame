@@ -4,3 +4,14 @@ api-version: '1.8'
 author: "30Shadesofping"
 version: 1.0.0
 description: Test Plugin for multiversion support
+
+commands:
+  spawnNpc:
+    description: Spawns an NPC
+    usage: /<command>
+    permission: multiversion.admin
+
+permissions:
+  multiversion.admin:
+    description: Default permission for the admin
+    default: op

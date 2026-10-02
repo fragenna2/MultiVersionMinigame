@@ -1,6 +1,7 @@
 package com.github.fragenna2.multiversion;
 
 import com.github.fragenna2.multiversion.api.NMSHandler;
+import com.github.fragenna2.multiversion.commands.SpawnNpc;
 import com.github.fragenna2.multiversion.listeners.JoinEvent;
 import com.github.fragenna2.multiversion.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ public class MultiVersionPlugin extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new JoinEvent(this.nmsHandler), this);
+        getCommand("spawnNpc").setExecutor(new SpawnNpc(this.nmsHandler));
     }
 
     private boolean setupNms() {

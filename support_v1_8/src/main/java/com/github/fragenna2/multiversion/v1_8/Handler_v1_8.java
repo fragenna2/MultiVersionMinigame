@@ -17,9 +17,9 @@ public class Handler_v1_8 implements NMSHandler {
     private EntityPlayer npc;
 
     @Override
-    public void spawnNpc() {
+    public void spawnNpc(org.bukkit.entity.Player player) {
 
-        org.bukkit.World bukkitWorld = Bukkit.getWorlds().get(0);
+        org.bukkit.World bukkitWorld = player.getWorld();
         WorldServer nmsWorld = ((CraftWorld) bukkitWorld).getHandle();
         MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
 
@@ -29,18 +29,17 @@ public class Handler_v1_8 implements NMSHandler {
         this.npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
 
         // Set NPC initial position (x, y, z, yaw, pitch)
-        Location loc = bukkitWorld.getSpawnLocation();
+        Location loc = player.getLocation();
         this.npc.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+        player.sendMessage("Spawned");
     }
 
     @Override
-    public void showNpc(UUID playerId) {
+    public void showNpc(org.bukkit.entity.Player player) {
         if (this.npc == null) return;
 
-        Player target = Bukkit.getPlayer(playerId);
-        if (target == null || !target.isOnline()) return;
-
-        PlayerConnection connection = ((CraftPlayer) target).getHandle().playerConnection;
+        if (player == null || !player.isOnline()) return;
+        PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 
         PacketPlayOutPlayerInfo infoPacket = new PacketPlayOutPlayerInfo(
                 PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
@@ -52,15 +51,16 @@ public class Handler_v1_8 implements NMSHandler {
         connection.sendPacket(spawnPacket);
 
         // 3. Update Head Rotation & Body Yaw
+        byte yawByte = (byte) (this.npc.yaw * 256.0F / 360.0F);
         PacketPlayOutEntityHeadRotation headRotationPacket = new PacketPlayOutEntityHeadRotation(
                 this.npc,
-                (byte) (this.npc.yaw * 256.0F / 360.0F)
+                yawByte
         );
         connection.sendPacket(headRotationPacket);
 
         // Remove NPC from TabList
         Bukkit.getScheduler().runTaskLater(
-                Bukkit.getPluginManager().getPlugin("YourPluginName"),
+                Bukkit.getPluginManager().getPlugin("MultiVersion"),
                 () -> {
                     PacketPlayOutPlayerInfo removeInfo = new PacketPlayOutPlayerInfo(
                             PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
@@ -68,18 +68,16 @@ public class Handler_v1_8 implements NMSHandler {
                     );
                     connection.sendPacket(removeInfo);
                 },
-                40L
+                20L
         );
     }
 
     @Override
-    public void hide(UUID playerId) {
+    public void hide(org.bukkit.entity.Player player) {
         if (this.npc == null) return;
 
-        Player target = Bukkit.getPlayer(playerId);
-        if (target == null || !target.isOnline()) return;
-
-        PlayerConnection connection = ((CraftPlayer) target).getHandle().playerConnection;
+        if (player == null || !player.isOnline()) return;
+        PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 
         PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(this.npc.getId());
         connection.sendPacket(destroyPacket);
